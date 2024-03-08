@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aplikasi buat kaum mendang-mending</title>
+  <style>
+    html {
+      background-color: #232946;
+      font-family: sans-serif;
+    }
+
+    body {
+      font-family: proxima-nova, sans-serif;
+      box-sizing: border-box;
+      padding: 0;
+      margin: 0;
+    }
+
+    section {
+      background-color: #eebbc3;
+      color: #232946;
+      font-size: 1.5rem;
+      font-weight: 600;
+      padding: 2rem 1rem;
+    }
+
+    input[type="text"] {
+      font-size: 1.5rem;
+    }
+
+    button {
+      font-size: 1.25rem;
+    }
+  </style>
+</head>
+
+<body>
+  <section>
+    <span>Mending</span> <input type="text" name="option1" id="option1" /> atau <input type="text" name="option2"
+      id="option2" /> <button id="compare"> 🤔 </button>
+  </section>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      console.log("Client side");
+      option1.focus();
+
+      option2.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+          compare(option1.value.trim(), option2.value.trim());
+        }
+      });
+    });
+
+    async function compare(opt1, opt2) {
+      option2.blur();
+      const url = `/compare?opt1=${encodeURIComponent(opt1)}&opt2=${encodeURIComponent(opt2)}`;
+
+      try {
+        const response = await fetch(url);
+
+        if (response.status !== 200) {
+          throw new Error('Unable to get an answer!');
+        }
+        const result = await response.text();
+        console.log(result);
+        option1.focus();
+
+      } catch (err) {
+        console.error(err);
+      }
+
+    }
+  </script>
+</body>
+
+</html>
