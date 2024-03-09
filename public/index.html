@@ -6,13 +6,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Aplikasi buat kaum mendang-mending</title>
   <style>
+    @import url('https://fonts.upset.dev/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+  </style>
+  <style>
     html {
       background-color: #232946;
-      font-family: sans-serif;
+      font-family: Montserrat, proxima-nova, sans-serif;
     }
 
     body {
-      font-family: proxima-nova, sans-serif;
+      font-size: 18px;
+      line-height: 1.8;
+      font-weight: 400;
       box-sizing: border-box;
       padding: 0;
       margin: 0;
@@ -24,39 +29,132 @@
       font-size: 1.5rem;
       font-weight: 600;
       padding: 2rem 1rem;
+      text-align: center;
     }
 
     input[type="text"] {
+      font-family: Montserrat, proxima-nova, sans-serif;
       font-size: 1.5rem;
+      background-color: transparent;
+      border-color: #fffffe;
+      color: #232946;
+      height: 2.5rem;
+      margin-bottom: 0px;
+      padding-left: 20px;
+      border: 0;
+      border-bottom: 3px dashed #232323;
+      border-radius: 3px;
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 1.4;
+      vertical-align: middle;
+
+
+    }
+
+    input[type="text"]:focus {
+      outline: 0;
+    }
+
+    #topic {
+      width: 36rem;
     }
 
     button {
       font-size: 1.25rem;
+      background-color: #232946;
+      color: #fffffe;
+      width: 80%;
+      padding: 0.7rem;
+      margin: 1rem;
+      border: 0;
+      cursor: pointer;
+      border-radius: 3px;
+    }
+
+    button:disabled {
+      background-color: #b8c1ec;
+    }
+
+    .topic {
+      padding-bottom: 0.5rem;
+    }
+
+    .options {
+      padding-bottom: 0.5rem;
+    }
+
+    main {
+      margin: 6rem 3rem;
+      padding: 2.5rem;
+      border-radius: 3px;
+      background-color: #fffffe;
+      opacity: 1;
+      transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg);
+      transform-style: preserve-3d;
     }
   </style>
 </head>
 
 <body>
   <section>
-    <span>Mending</span> <input type="text" name="option1" id="option1" /> atau <input type="text" name="option2"
-      id="option2" /> <button id="compare"> 🤔 </button>
+    <div class="topic"><input type="text" id="topic" name="topic" placeholder="Topik untuk dibandingkan..." required />
+    </div>
+
+    <div class="options">
+      <span>mending</span> <input type="text" name="option1" id="option1" required />
+      atau <input type="text" name="option2" id="option2" required />
+    </div>
+
+    <div class="action">
+      <button id="compareButton"> 👇 mending mana? </button>
+    </div>
+
   </section>
+
+  <main id="suggestion">
+    <h3 id="topicText">Topic</h3>
+    <p id="responseText">Some response here...</p>
+  </main>
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       console.log("Client side");
-      option1.focus();
+      suggestion.hidden = true;
+      topic.focus();
+      compareButton.disabled = true;
 
-      option2.addEventListener('keydown', function (e) {
+      option2.addEventListener('keydown', async function (e) {
+        compareButton.disabled = false;
         if (e.key === 'Enter') {
-          compare(option1.value.trim(), option2.value.trim());
+          compareButton.textContent = "🤔 mikir dulu..."
+          compareButton.disabled = true;
+          await compare(topic.value.trim(), option1.value.trim(), option2.value.trim());
+          compareButton.textContent = "👇 mending mana?"
         }
       });
+
+      compareButton.addEventListener('click', async function (e) {
+        console.log("Button compare click");
+        compareButton.textContent = "🤔 mikir dulu..."
+        compareButton.disabled = true;
+        await compare(topic.value.trim(), option1.value.trim(), option2.value.trim());
+        compareButton.textContent = "👇 mending mana?"
+        topic.focus();
+        compareButton.disabled = true;
+      });
+
+      topic.addEventListener('focus', function (e) {
+
+
+      });
+
     });
 
-    async function compare(opt1, opt2) {
+
+    async function compare(topic, opt1, opt2) {
       option2.blur();
-      const url = `/compare?opt1=${encodeURIComponent(opt1)}&opt2=${encodeURIComponent(opt2)}`;
+      const url = `/compare?topic=${encodeURIComponent(topic)}&opt1=${encodeURIComponent(opt1)}&opt2=${encodeURIComponent(opt2)}`;
 
       try {
         const response = await fetch(url);
@@ -66,12 +164,24 @@
         }
         const result = await response.text();
         console.log(result);
-        option1.focus();
+        if (result) {
+          topicText.textContent = topic;
+          responseText.textContent = result;
+          suggestion.hidden = false;
+          resetForm();
+        }
 
       } catch (err) {
         console.error(err);
       }
 
+    }
+    function resetForm() {
+      topic.value = '';
+      option1.value = '';
+      option2.value = '';
+
+      topic.focus();
     }
   </script>
 </body>

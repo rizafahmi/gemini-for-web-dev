@@ -4,8 +4,8 @@
   "description": "",
   "main": "",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node --watch server.js",
+    "start": "node --env-file=.env server.js",
+    "dev": "node --watch --env-file=.env server.js",
     "lint": "eslint . --ext .js",
     "lint:fix": "eslint . --ext .js --fix",
     "format": "prettier *.js -write"
@@ -16,6 +16,9 @@
   "type": "module",
   "devDependencies": {
     "eslint": "8.57.0",
-    "prettier": "^3.2.5"
+    "prettier": "3.2.5"
+  },
+  "dependencies": {
+    "@google/generative-ai": "0.2.1"
   }
 }
