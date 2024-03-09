@@ -4,6 +4,7 @@
 - [x] Render markdown to html
 - [ ] Save results into localStorage
 - [ ] Add upvote and downvote
+- [ ] Load previous result into form
 
 
 ## Example Questions
