@@ -80,6 +80,10 @@
       padding-bottom: 0.5rem;
     }
 
+    #topicText {
+      text-transform: uppercase;
+    }
+
     .options {
       padding-bottom: 0.5rem;
     }
@@ -114,7 +118,7 @@
 
   <main id="suggestion">
     <h3 id="topicText">Topic</h3>
-    <p id="responseText">Some response here...</p>
+    <div id="responseText"></div>
   </main>
 
   <script>
@@ -127,26 +131,12 @@
       option2.addEventListener('keydown', async function (e) {
         compareButton.disabled = false;
         if (e.key === 'Enter') {
-          compareButton.textContent = "🤔 mikir dulu..."
-          compareButton.disabled = true;
-          await compare(topic.value.trim(), option1.value.trim(), option2.value.trim());
-          compareButton.textContent = "👇 mending mana?"
+          await runComparison();
         }
       });
 
       compareButton.addEventListener('click', async function (e) {
-        console.log("Button compare click");
-        compareButton.textContent = "🤔 mikir dulu..."
-        compareButton.disabled = true;
-        await compare(topic.value.trim(), option1.value.trim(), option2.value.trim());
-        compareButton.textContent = "👇 mending mana?"
-        topic.focus();
-        compareButton.disabled = true;
-      });
-
-      topic.addEventListener('focus', function (e) {
-
-
+        await runComparison();
       });
 
     });
@@ -166,7 +156,7 @@
         console.log(result);
         if (result) {
           topicText.textContent = topic;
-          responseText.textContent = result;
+          responseText.insertAdjacentHTML('beforeend', result);
           suggestion.hidden = false;
           resetForm();
         }
@@ -182,6 +172,14 @@
       option2.value = '';
 
       topic.focus();
+    }
+    async function runComparison() {
+      compareButton.textContent = "🤔 mikir dulu..."
+      compareButton.disabled = true;
+      await compare(topic.value.trim(), option1.value.trim(), option2.value.trim());
+      compareButton.textContent = "👇 mending mana?"
+      topic.focus();
+      compareButton.disabled = true;
     }
   </script>
 </body>

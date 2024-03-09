@@ -1,7 +1,7 @@
 # Gemini AI for Web Developer
 
 ## TODO
-- [ ] Render markdown to html
+- [x] Render markdown to html
 - [ ] Save results into localStorage
 - [ ] Add upvote and downvote
 
@@ -12,3 +12,4 @@
 - Manga mending Slam Dunk atau Dragonball?
 - Liburan mending Jogja atau Semarang?
 - Cuaca mending hujan atau panas?
+- Laptop mending macbook atau thinkpad?

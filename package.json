@@ -19,6 +19,7 @@
     "prettier": "3.2.5"
   },
   "dependencies": {
-    "@google/generative-ai": "0.2.1"
+    "@google/generative-ai": "0.2.1",
+    "marked": "12.0.1"
   }
 }

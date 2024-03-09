@@ -1,6 +1,7 @@
 import fs from 'fs';
 import http from 'http';
 import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from '@google/generative-ai';
+import { parse } from 'marked';
 
 async function compare(topic, opt1, opt2) {
   // Generate suggestion
@@ -66,7 +67,8 @@ async function compare(topic, opt1, opt2) {
       const options = decodeURIComponent(search.substring(1)).split('&');
       const suggestion = await compare(options[0].split('=')[1], options[1].split('=')[1], options[2].split('=')[1]);
       console.log(suggestion);
-      response.writeHead(200).end(suggestion);
+      
+      response.writeHead(200).end(parse(suggestion));
     } else {
       console.error(`${url} is 404!`);
       response.writeHead(404);
