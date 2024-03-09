@@ -2,9 +2,10 @@
 
 ## TODO
 - [x] Render markdown to html
-- [ ] Save results into localStorage
+- [ ] Save results into db
 - [ ] Add upvote and downvote
 - [ ] Load previous result into form
+- [ ] Load previous result if exist
 
 
 ## Example Questions

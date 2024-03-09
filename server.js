@@ -2,6 +2,12 @@ import fs from 'fs';
 import http from 'http';
 import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from '@google/generative-ai';
 import { parse } from 'marked';
+import { createClient } from '@libsql/client';
+
+const client = createClient({
+  url: process.env.TURSO_DB_URL,
+  authToken: process.env.TURSO_TOKEN
+});
 
 async function compare(topic, opt1, opt2) {
   // Generate suggestion
@@ -65,8 +71,15 @@ async function compare(topic, opt1, opt2) {
       const parsedUrl = new URL(`http://localhost/${url}`);
       const { search } = parsedUrl;
       const options = decodeURIComponent(search.substring(1)).split('&');
-      const suggestion = await compare(options[0].split('=')[1], options[1].split('=')[1], options[2].split('=')[1]);
+      const topic = options[0].split('=')[1];
+      const opt1 = options[1].split('=')[1];
+      const opt2 = options[2].split('=')[1];
+      const suggestion = await compare(topic, opt1, opt2);
       console.log(suggestion);
+      client.execute({
+        sql: 'INSERT INTO topics (topic, option1, option2, result) VALUES (?, ?, ?, ?)',
+        args: [topic, opt1, opt2, suggestion]
+      });
       
       response.writeHead(200).end(parse(suggestion));
     } else {
