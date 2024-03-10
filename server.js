@@ -82,6 +82,17 @@ async function compare(topic, opt1, opt2) {
       });
       
       response.writeHead(200).end(parse(suggestion));
+    } else if(url === '/results') {
+      const { rows } = await client.execute('SELECT * FROM topics ORDER BY id DESC');
+      const topics = rows.map(row => {
+        return {
+          topic: row.topic,
+          option1: row.option1,
+          option2: row.option2,
+          result: parse(row.result)
+        };
+      });
+      response.writeHead(200).end(JSON.stringify(topics));
     } else {
       console.error(`${url} is 404!`);
       response.writeHead(404);

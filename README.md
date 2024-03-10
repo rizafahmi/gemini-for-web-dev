@@ -2,7 +2,8 @@
 
 ## TODO
 - [x] Render markdown to html
-- [ ] Save results into db
+- [x] Save result into db
+- [x] List results
 - [ ] Add upvote and downvote
 - [ ] Load previous result into form
 - [ ] Load previous result if exist

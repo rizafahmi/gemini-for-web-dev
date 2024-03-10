@@ -23,6 +23,14 @@
       margin: 0;
     }
 
+    h2 {
+      color: #fffffe;
+    }
+
+    h3 {
+      text-transform: uppercase;
+    }
+
     section {
       background-color: #eebbc3;
       color: #232946;
@@ -80,10 +88,6 @@
       padding-bottom: 0.5rem;
     }
 
-    #topicText {
-      text-transform: uppercase;
-    }
-
     .options {
       padding-bottom: 0.5rem;
     }
@@ -96,6 +100,23 @@
       opacity: 1;
       transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg);
       transform-style: preserve-3d;
+    }
+
+    #result {
+      margin: 6rem 3rem;
+      padding: 2.5rem;
+      border-radius: 3px;
+      background-color: #b8c1ec;
+      opacity: 1;
+      transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg);
+      transform-style: preserve-3d;
+    }
+
+    .resultContainer {
+      width: 90%;
+      max-width: 1040px;
+      margin-left: auto;
+      margin-right: auto;
     }
   </style>
 </head>
@@ -121,12 +142,26 @@
     <div id="responseText"></div>
   </main>
 
+  <div class="resultContainer">
+    <h2>Hasil Terdahulu</h2>
+    <template id="resultsTemplate">
+      <div id="results">
+      </div>
+    </template>
+  </div>
+
+
+
   <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', async function () {
       console.log("Client side");
       suggestion.hidden = true;
       topic.focus();
       compareButton.disabled = true;
+
+      const res = await fetch("/results");
+      const results = await res.json()
+      renderResults(results);
 
       option2.addEventListener('keydown', async function (e) {
         compareButton.disabled = false;
@@ -180,6 +215,27 @@
       compareButton.textContent = "👇 mending mana?"
       topic.focus();
       compareButton.disabled = true;
+    }
+
+    function renderResults(data) {
+      document.querySelector('.resultContainer').appendChild(resultsTemplate.content);
+
+      for (let d of data) {
+
+        const resultDiv = document.createElement('div');
+        resultDiv.id = "result";
+
+        const { result, topic } = d;
+        const header = document.createElement('h3');
+        header.textContent = topic;
+        resultDiv.append(header);
+
+        const responseDiv = document.createElement('div');
+        responseDiv.insertAdjacentHTML('beforeend', result);
+        resultDiv.append(responseDiv);
+
+        results.append(resultDiv);
+      }
     }
   </script>
 </body>
