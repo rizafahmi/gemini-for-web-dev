@@ -118,6 +118,13 @@
       margin-left: auto;
       margin-right: auto;
     }
+
+    footer {
+      padding: 3.5rem;
+      background-color: #fffffe;
+      text-align: center;
+      color: #232946;
+    }
   </style>
 </head>
 
@@ -150,7 +157,7 @@
     </template>
   </div>
 
-
+  <footer>Made with Google Cloud credits #GeminiSprint</footer>
 
   <script>
     document.addEventListener('DOMContentLoaded', async function () {
@@ -190,7 +197,7 @@
         const result = await response.text();
         console.log(result);
         if (result) {
-          topicText.textContent = topic;
+          topicText.textContent = `${topic}: ${opt1} atau ${opt2}?`;
           responseText.insertAdjacentHTML('beforeend', result);
           suggestion.hidden = false;
           resetForm();
@@ -225,9 +232,9 @@
         const resultDiv = document.createElement('div');
         resultDiv.id = "result";
 
-        const { result, topic } = d;
+        const { option1, option2, result, topic } = d;
         const header = document.createElement('h3');
-        header.textContent = topic;
+        header.textContent = `${topic}: ${option1} atau ${option2}?`;
         resultDiv.append(header);
 
         const responseDiv = document.createElement('div');
