@@ -4,7 +4,7 @@
 - [x] Render markdown to html
 - [x] Save result into db
 - [x] List results
-- [ ] Deploy
+- [x] Deploy
 - [ ] Add upvote and downvote
 - [ ] Load previous result into form
 - [ ] Load previous result if exist
