@@ -10,6 +10,14 @@
 - [ ] Load previous result if exist
 - [ ] Add github ribbon
 
+## Deployment
+
+Using cloudrun?
+
+```
+$ gcloud init
+$ gcloud run deploy --set-env-vars "KEY1=VALUE1,KEY2=VALUE2" 
+```
 
 ## Example Questions
 

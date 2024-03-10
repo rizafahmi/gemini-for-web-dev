@@ -4,7 +4,7 @@
   "description": "",
   "main": "",
   "scripts": {
-    "start": "node --env-file=.env server.js",
+    "start": "node server.js",
     "dev": "node --watch --env-file=.env server.js",
     "lint": "eslint . --ext .js",
     "lint:fix": "eslint . --ext .js --fix",
