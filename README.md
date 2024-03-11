@@ -5,10 +5,11 @@
 - [x] Save result into db
 - [x] List results
 - [x] Deploy
-- [ ] Add upvote and downvote
+- [x] Add github ribbon
+- [x] Add upvote and downvote
 - [ ] Load previous result into form
 - [ ] Load previous result if exist
-- [ ] Add github ribbon
+- [ ] User agent -> uuid -> upvote and downvote
 
 ## Deployment
 

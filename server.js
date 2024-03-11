@@ -4,10 +4,13 @@ import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from '@google/ge
 import { parse } from 'marked';
 import { createClient } from '@libsql/client';
 
+const url = process.env.TURSO_DB_URL;
+
 const client = createClient({
-  url: process.env.TURSO_DB_URL,
+  url,
   authToken: process.env.TURSO_TOKEN
 });
+// initdb();
 
 async function compare(topic, opt1, opt2) {
   // Generate suggestion
@@ -59,6 +62,19 @@ async function compare(topic, opt1, opt2) {
   return response.text();
 }
 
+// async function initdb() {
+//   const sql = `CREATE TABLE IF NOT EXISTS topics (
+//     ID INTEGER PRIMARY KEY AUTOINCREMENT,
+//     topic VARCHAR(100),
+//     option1 VARCHAR(100),
+//     option2 VARCHAR(100),
+//     result TEXT
+//     , upvote INTEGER DEFAULT 0, downvote INTEGER DEFAULT 0);`;
+
+//   client.execute({sql});
+
+// }
+
 (async () => {
   const server = http.createServer(async (request, response) => {
     const { url } = request;
@@ -83,16 +99,43 @@ async function compare(topic, opt1, opt2) {
       
       response.writeHead(200).end(parse(suggestion));
     } else if(url === '/results') {
-      const { rows } = await client.execute('SELECT * FROM topics ORDER BY id DESC');
+      const { rows } = await client.execute('SELECT * FROM topics ORDER BY (upvote + downvote) DESC, id DESC');
       const topics = rows.map(row => {
         return {
+          id: row.ID,
           topic: row.topic,
           option1: row.option1,
           option2: row.option2,
+          upvote: row.upvote,
+          downvote: row.downvote,
           result: parse(row.result)
         };
       });
       response.writeHead(200).end(JSON.stringify(topics));
+    } else if(url === '/upvote') {
+      let data = '';
+      request.on('data', function(chunk) {
+        data += chunk.toString();
+      });
+      request.on('end', async function() {
+        console.log(JSON.parse(data));
+        const {id} = JSON.parse(data);
+        const sql = 'UPDATE topics SET upvote = upvote + 1 WHERE ID = ?';
+        await client.execute({sql, args: [id]});
+        response.writeHead(200).end();
+      });
+    } else if(url === '/downvote') {
+      let data = '';
+      request.on('data', function(chunk) {
+        data += chunk.toString();
+      });
+      request.on('end', async function() {
+        console.log(JSON.parse(data));
+        const {id} = JSON.parse(data);
+        const sql = 'UPDATE topics SET downvote = downvote - 1 WHERE ID = ?';
+        await client.execute({sql, args: [id]});
+        response.writeHead(200).end();
+      });
     } else {
       console.error(`${url} is 404!`);
       response.writeHead(404);

@@ -5,7 +5,7 @@
   "main": "",
   "scripts": {
     "start": "node server.js",
-    "dev": "node --watch --env-file=.env server.js",
+    "dev": "NODE_ENV=dev node --watch --env-file=.env server.js",
     "lint": "eslint . --ext .js",
     "lint:fix": "eslint . --ext .js --fix",
     "format": "prettier *.js -write"

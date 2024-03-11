@@ -68,7 +68,7 @@
       width: 36rem;
     }
 
-    button {
+    #compareButton {
       font-size: 1.25rem;
       background-color: #232946;
       color: #fffffe;
@@ -80,8 +80,16 @@
       border-radius: 3px;
     }
 
-    button:disabled {
+    #compareButton:disabled {
       background-color: #b8c1ec;
+    }
+
+    button.votes {
+      padding: 0.25rem 0.5rem;
+      background: #fffffe;
+      border: 0;
+      border-radius: 3px;
+      margin-right: 0.25rem;
     }
 
     .topic {
@@ -125,11 +133,7 @@
       text-align: center;
       color: #232946;
     }
-  </style>
-</head>
 
-<body>
-  <style>
     #forkongithub a {
       background: #232946;
       color: #fffffe;
@@ -191,7 +195,11 @@
         box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.8);
       }
     }
-  </style><span id="forkongithub"><a href="https://github.com/rizafahmi/gemini-for-web-dev">Fork me on GitHub</a></span>
+  </style>
+</head>
+
+<body>
+  <span id="forkongithub"><a href="https://github.com/rizafahmi/gemini-for-web-dev">Fork me on GitHub</a></span>
   <section>
     <div class="topic"><input type="text" id="topic" name="topic" placeholder="Topik untuk dibandingkan..." required />
     </div>
@@ -300,9 +308,47 @@
         header.textContent = `${topic}: ${option1} atau ${option2}?`;
         resultDiv.append(header);
 
+        const votesDiv = document.createElement('div');
+        const upvoteButton = document.createElement('button');
+        upvoteButton.className = "votes";
+        upvoteButton.textContent = `👍 ${d.upvote}`;
+        upvoteButton.dataset.tid = d.id;
+        const downvoteButton = document.createElement('button');
+        downvoteButton.textContent = `👎 ${d.downvote}`;
+        downvoteButton.dataset.tid = d.id;
+        downvoteButton.className = "votes";
+
+        upvoteButton.addEventListener('click', async function (e) {
+          e.target.disabled = true;
+          fetch('/upvote', {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ id: e.target.dataset.tid })
+          });
+          upvoteButton.textContent = `👍 ${parseInt(upvoteButton.textContent.split(' ')[1]) + 1}`;
+        });
+        downvoteButton.addEventListener('click', async function (e) {
+          e.target.disabled = true;
+          fetch('/downvote', {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ id: e.target.dataset.tid })
+          });
+          downvoteButton.textContent = `👎 ${parseInt(downvoteButton.textContent.split(' ')[1]) - 1}`;
+        });
+
+        votesDiv.append(upvoteButton);
+        votesDiv.append(downvoteButton);
+
+
         const responseDiv = document.createElement('div');
         responseDiv.insertAdjacentHTML('beforeend', result);
         resultDiv.append(responseDiv);
+        resultDiv.append(votesDiv);
 
         results.append(resultDiv);
       }
