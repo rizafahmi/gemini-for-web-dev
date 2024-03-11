@@ -17,7 +17,7 @@ Using cloudrun?
 
 ```
 $ gcloud init
-$ gcloud run deploy --set-env-vars "KEY1=VALUE1,KEY2=VALUE2" 
+$ gcloud run deploy --source . --set-env-vars "KEY1=VALUE1,KEY2=VALUE2"  # service name: gemini-mendang-mending
 ```
 
 ## Example Questions
