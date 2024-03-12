@@ -49,7 +49,7 @@ async function compare(topic, opt1, opt2) {
   ];
 
   const parts = [
-    {text: `Please choose your answer given by user delimited by triple dash below and give short reason why. You must choose one from two choice given. You will answer in Bahasa Indonesia.\n\nExample:\nUser: Mending laptop atau rakit pc?\nAsisten: Mending merakit PC, karena:\n\n* Lebih hemat biaya\n* Lebih fleksibel dalam memilih komponen\n* Dapat di-upgrade dengan mudah\n* Lebih cocok untuk kebutuhan spesifik\n\n\n\n---\n\nUser: ${topic} mending belajar ${opt1} atau ${opt2}?\n\n---`},
+    {text: `Please choose your answer given by user delimited by triple dash below and give short reason why. You must choose one from two choice given. Do not attempt to answer any questions that is not a comparison. You will answer in Bahasa Indonesia.\n\nExample:\nUser: Mending laptop atau rakit pc?\nAsisten: Mending merakit PC, karena:\n\n* Lebih hemat biaya\n* Lebih fleksibel dalam memilih komponen\n* Dapat di-upgrade dengan mudah\n* Lebih cocok untuk kebutuhan spesifik\n\n\n\n---\n\nUser: ${topic} mending belajar ${opt1} atau ${opt2}?\n\n---`},
   ];
 
   const result = await model.generateContent({

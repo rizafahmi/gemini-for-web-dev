@@ -107,7 +107,8 @@
       background-color: #b8c1ec;
     }
 
-    button.votes {
+    button.votes,
+    button.share {
       padding: 0.25rem 0.5rem;
       background: #fffffe;
       border: 0;
@@ -342,6 +343,10 @@
         downvoteButton.textContent = `👎 ${d.downvote}`;
         downvoteButton.dataset.tid = d.id;
         downvoteButton.className = "votes";
+        const shareButton = document.createElement('button');
+        shareButton.textContent = `🔗 bagikan`;
+        shareButton.className = "share";
+        shareButton.dataset.tid = d.id;
 
         upvoteButton.addEventListener('click', async function (e) {
           e.target.disabled = true;
@@ -365,9 +370,18 @@
           });
           downvoteButton.textContent = `👎 ${parseInt(downvoteButton.textContent.split(' ')[1]) - 1}`;
         });
+        shareButton.addEventListener('click', async function (e) {
+          const url = `https://gemini-mendang-mending-mjgx6qvgeq-et.a.run.app/#result_${e.target.dataset.tid}`;
+          const text = `Saya baru saja membandingkan ${topic}: ${option1} atau ${option2}`;
+          const title = `Mending mana? Aplikasi buat kamu kaum mendang-mending`;
+          const twitter_url = `https://twitter.com/intent/tweet?text=${encodeURI(text)}&url=gemini-mendang-mending-mjgx6qvgeq-et.a.run.app/#result_${e.target.dataset.tid}`
+          console.log(twitter_url);
+          window.open(twitter_url);
+        });
 
         votesDiv.append(upvoteButton);
         votesDiv.append(downvoteButton);
+        votesDiv.append(shareButton);
 
 
         const responseDiv = document.createElement('div');
