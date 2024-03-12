@@ -49,7 +49,7 @@ async function compare(topic, opt1, opt2) {
   ];
 
   const parts = [
-    {text: `Please choose your answer given by user delimited by triple dash below and give short reason why. You will answer in Bahasa Indonesia.\n\nExample:\nUser: Mending laptop atau rakit pc?\nAsisten: Mending merakit PC, karena:\n\n* Lebih hemat biaya\n* Lebih fleksibel dalam memilih komponen\n* Dapat di-upgrade dengan mudah\n* Lebih cocok untuk kebutuhan spesifik\n\n\n\n---\n\nUser: ${topic} mending belajar ${opt1} atau ${opt2}?`},
+    {text: `Please choose your answer given by user delimited by triple dash below and give short reason why. You must choose one from two choice given. You will answer in Bahasa Indonesia.\n\nExample:\nUser: Mending laptop atau rakit pc?\nAsisten: Mending merakit PC, karena:\n\n* Lebih hemat biaya\n* Lebih fleksibel dalam memilih komponen\n* Dapat di-upgrade dengan mudah\n* Lebih cocok untuk kebutuhan spesifik\n\n\n\n---\n\nUser: ${topic} mending belajar ${opt1} atau ${opt2}?\n\n---`},
   ];
 
   const result = await model.generateContent({
@@ -63,13 +63,7 @@ async function compare(topic, opt1, opt2) {
 }
 
 // async function initdb() {
-//   const sql = `CREATE TABLE IF NOT EXISTS topics (
-//     ID INTEGER PRIMARY KEY AUTOINCREMENT,
-//     topic VARCHAR(100),
-//     option1 VARCHAR(100),
-//     option2 VARCHAR(100),
-//     result TEXT
-//     , upvote INTEGER DEFAULT 0, downvote INTEGER DEFAULT 0);`;
+//   const sql = 'CREATE TABLE IF NOT EXISTS topics ( ID INTEGER PRIMARY KEY AUTOINCREMENT, topic VARCHAR(100) NOT NULL, option1 VARCHAR(100) UNIQUE, option2 VARCHAR(100) UNIQUE, result TEXT , upvote INTEGER DEFAULT 0, downvote INTEGER DEFAULT 0);';
 
 //   client.execute({sql});
 
@@ -93,7 +87,7 @@ async function compare(topic, opt1, opt2) {
       const suggestion = await compare(topic, opt1, opt2);
       console.log(suggestion);
       client.execute({
-        sql: 'INSERT INTO topics (topic, option1, option2, result) VALUES (?, ?, ?, ?)',
+        sql: 'INSERT OR IGNORE INTO topics (topic, option1, option2, result) VALUES (?, ?, ?, ?);',
         args: [topic, opt1, opt2, suggestion]
       });
       
@@ -108,7 +102,7 @@ async function compare(topic, opt1, opt2) {
           option2: row.option2,
           upvote: row.upvote,
           downvote: row.downvote,
-          result: parse(row.result)
+          result: parse(row.result || '')
         };
       });
       response.writeHead(200).end(JSON.stringify(topics));
