@@ -85,7 +85,6 @@ async function compare(topic, opt1, opt2) {
       const opt1 = options[1].split('=')[1];
       const opt2 = options[2].split('=')[1];
       const suggestion = await compare(topic, opt1, opt2);
-      console.log(suggestion);
       client.execute({
         sql: 'INSERT OR IGNORE INTO topics (topic, option1, option2, result) VALUES (?, ?, ?, ?);',
         args: [topic, opt1, opt2, suggestion]
@@ -112,7 +111,6 @@ async function compare(topic, opt1, opt2) {
         data += chunk.toString();
       });
       request.on('end', async function() {
-        console.log(JSON.parse(data));
         const {id} = JSON.parse(data);
         const sql = 'UPDATE topics SET upvote = upvote + 1 WHERE ID = ?';
         await client.execute({sql, args: [id]});
@@ -124,7 +122,6 @@ async function compare(topic, opt1, opt2) {
         data += chunk.toString();
       });
       request.on('end', async function() {
-        console.log(JSON.parse(data));
         const {id} = JSON.parse(data);
         const sql = 'UPDATE topics SET downvote = downvote - 1 WHERE ID = ?';
         await client.execute({sql, args: [id]});
