@@ -133,7 +133,7 @@
       transform-style: preserve-3d;
     }
 
-    #result {
+    div.result {
       margin: 6rem 3rem;
       padding: 2.5rem;
       border-radius: 3px;
@@ -325,7 +325,8 @@
       for (let d of data) {
 
         const resultDiv = document.createElement('div');
-        resultDiv.id = "result";
+        resultDiv.id = `result_${d.id}`;
+        resultDiv.className = 'result';
 
         const { option1, option2, result, topic } = d;
         const header = document.createElement('h3');
