@@ -10,7 +10,8 @@
 - [ ] Load previous result into form
 - [ ] Load previous result if exist
 - [ ] User agent -> uuid -> upvote and downvote
-- [ ] Add social share
+- [x] Add social share
+- [ ] Responsive design for mobile
 
 ## Deployment
 
