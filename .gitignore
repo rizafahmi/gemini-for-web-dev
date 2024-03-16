@@ -2,3 +2,4 @@ node_modules/
 .env
 *.db
 settings.json
+.DS_Store
