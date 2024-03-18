@@ -11,7 +11,7 @@
 - [ ] Load previous result if exist
 - [ ] User agent -> uuid -> upvote and downvote
 - [x] Add social share
-- [ ] Responsive design for mobile
+- [x] Responsive design for mobile
 
 ## Deployment
 
