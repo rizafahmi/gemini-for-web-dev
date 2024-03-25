@@ -1,5 +1,10 @@
 # Gemini AI for Web Developer
 
+Showcase of Gemini AI for Web Developer. Build with:
+- NodeJS (vanilla)
+- Turso database for saving previous result
+- HTML, CSS and JavaScript
+
 ## TODO
 - [x] Render markdown to html
 - [x] Save result into db
